@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>南山発注</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="南山発注">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ホーム：用紙を選ぶ -->
+<main id="screen-home" class="screen">
+  <header class="topbar"><h1>南山発注</h1></header>
+  <div class="home">
+    <p class="lead">発注する用紙を選んでください</p>
+    <div id="sheet-buttons"></div>
+    <p id="load-error" class="error" hidden></p>
+  </div>
+</main>
+
+<!-- 入力画面 -->
+<main id="screen-form" class="screen" hidden>
+  <header class="topbar">
+    <button class="back" data-action="home">‹ 戻る</button>
+    <h1 id="form-title"></h1>
+  </header>
+  <div class="form-body">
+    <p id="form-to" class="to"></p>
+    <section class="card info">
+      <label>店舗 <span class="req">必須</span>
+        <select id="f-store"></select>
+      </label>
+      <label>納品日 <span class="req">必須</span>
+        <input type="date" id="f-date">
+      </label>
+      <label>担当者 <span class="req">必須</span>
+        <input type="text" id="f-person" placeholder="例：山田" autocomplete="off">
+      </label>
+    </section>
+
+    <div class="searchbar">
+      <input type="search" id="f-search" placeholder="品名で検索" autocomplete="off">
+      <button id="f-only" class="chip" aria-pressed="false">発注のみ</button>
+    </div>
+
+    <div id="item-list"></div>
+
+    <section class="card">
+      <label><span id="memo-label">連絡事項</span>
+        <textarea id="f-memo" rows="3" placeholder="任意"></textarea>
+      </label>
+    </section>
+    <div class="spacer"></div>
+  </div>
+  <footer class="bottombar">
+    <button id="btn-clear" class="sub">クリア</button>
+    <button id="btn-preview" class="primary">PDFを作成 <span id="count-badge">0品目</span></button>
+  </footer>
+</main>
+
+<!-- 確認（プレビュー）画面 -->
+<main id="screen-preview" class="screen" hidden>
+  <header class="topbar">
+    <button class="back" data-action="form">‹ 戻る</button>
+    <h1>確認</h1>
+  </header>
+  <div class="preview-body">
+    <p class="lead small">受け手が印刷するものと同じ内容です。確認して「OK」を押してください。</p>
+    <div id="preview-wrap"><div id="preview-scaler"></div></div>
+    <div class="spacer"></div>
+  </div>
+  <footer class="bottombar" id="preview-actions">
+    <button data-action="form" class="sub">戻る</button>
+    <button id="btn-print" class="sub">印刷</button>
+    <button id="btn-ok" class="primary">OK</button>
+  </footer>
+</main>
+
+<!-- PDF完成 → 送信 -->
+<div id="send-panel" class="overlay" hidden>
+  <div class="dialog">
+    <h2>PDFができました</h2>
+    <p id="send-filename" class="filename"></p>
+    <button id="btn-share" class="primary big">LINEに送る（共有）</button>
+    <p id="share-help" class="small">共有メニューでLINEを選び、送り先のグループを選んでください。</p>
+    <a id="btn-save" class="sub big" href="#" download>PDFを保存</a>
+    <p id="save-help" class="small" hidden>共有メニューが使えないため、PDFを保存してからLINEで添付して送ってください。</p>
+    <button id="btn-send-close" class="link">閉じる（確認画面に戻る）</button>
+  </div>
+</div>
+
+<div id="busy" class="overlay" hidden><div class="dialog"><p>PDFを作成しています…</p></div></div>
+
+<div id="print-area"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
